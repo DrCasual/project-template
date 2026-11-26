@@ -1,0 +1,37 @@
+# Runs on every pull request: checks only, nothing is pushed or deployed.
+name: ci
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  packages: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: ci-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  labels:
+    if: github.event.action == 'opened' || github.event.action == 'reopened'
+    uses: DrCasual/devops-templates/.github/workflows/pr-labels.yml@v1
+
+  # Remove the stacks this project doesn't use.
+  python:
+    uses: DrCasual/devops-templates/.github/workflows/ci-python.yml@v1
+    with:
+      python-version: "3.12"
+
+  node:
+    uses: DrCasual/devops-templates/.github/workflows/ci-node.yml@v1
+    with:
+      node-version: "20"
+      working-directory: web
+
+  image:
+    uses: DrCasual/devops-templates/.github/workflows/docker-image.yml@v1
+    with:
+      smoke-command: bash deploy/smoke.sh

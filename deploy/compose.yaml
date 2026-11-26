@@ -1,0 +1,32 @@
+# Deployed by the pipeline to /opt/<domain>/compose.yaml on the server.
+# The app image below is a placeholder: every deploy writes the real tag
+# into compose.override.yaml next to it.
+# Per-environment values come from the .env that lives only on the server.
+services:
+  app:
+    image: ghcr.io/drcasual/__APP__:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-app}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${APP_PORT:-8090}:8000"   # only reachable via the host nginx
+    volumes:
+      - ./data:/data
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      retries: 10

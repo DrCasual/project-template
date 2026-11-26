@@ -1,0 +1,31 @@
+# Version tag (v1.2.3): promote the image that ran on staging, deploy it to
+# production, then publish a GitHub Release with generated notes.
+name: release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  image:
+    uses: DrCasual/devops-templates/.github/workflows/promote-image.yml@v1
+
+  deploy:
+    needs: image
+    uses: DrCasual/devops-templates/.github/workflows/deploy.yml@v1
+    with:
+      environment: production
+      image: ${{ needs.image.outputs.image }}
+      runs-on: '["self-hosted", "home-server"]'
+      deploy-dir: /opt/__DOMAIN__
+      health-url: http://127.0.0.1:__PROD_PORT__/health
+      backup-command: bash "$GITHUB_WORKSPACE/deploy/backup.sh"
+      url: https://__DOMAIN__
+
+  release:
+    needs: deploy
+    uses: DrCasual/devops-templates/.github/workflows/github-release.yml@v1

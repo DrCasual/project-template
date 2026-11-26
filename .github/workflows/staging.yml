@@ -1,0 +1,30 @@
+# Every merge to main: build the image once, push it as sha-<7>, deploy it to staging.
+name: staging
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    uses: DrCasual/devops-templates/.github/workflows/docker-image.yml@v1
+    with:
+      push: true
+      extra-tags: main
+      smoke-command: bash deploy/smoke.sh
+
+  deploy:
+    needs: image
+    uses: DrCasual/devops-templates/.github/workflows/deploy.yml@v1
+    with:
+      environment: staging
+      image: ${{ needs.image.outputs.image }}
+      runs-on: '["self-hosted", "home-server"]'
+      deploy-dir: /opt/staging.__DOMAIN__
+      health-url: http://127.0.0.1:__STAGING_PORT__/health
+      backup-command: bash "$GITHUB_WORKSPACE/deploy/backup.sh"
+      url: https://staging.__DOMAIN__

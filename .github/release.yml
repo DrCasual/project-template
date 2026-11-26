@@ -1,0 +1,12 @@
+# Groups the generated GitHub release notes by pull request label.
+# Labels are set automatically from the branch prefix (pr-labels workflow).
+changelog:
+  categories:
+    - title: New
+      labels: [feature]
+    - title: Fixed
+      labels: [fix]
+    - title: Maintenance
+      labels: [chore]
+    - title: Other changes
+      labels: ["*"]

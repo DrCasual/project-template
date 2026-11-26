@@ -1,0 +1,25 @@
+# secrets and local data: never in git
+.env
+data/
+pgdata/
+*.db
+backups/
+
+# build output and dependencies
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.tsbuildinfo
+
+# packages and dumps
+*.zip
+*.sql.gz
+*.tgz
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
