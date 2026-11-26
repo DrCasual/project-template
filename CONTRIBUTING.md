@@ -8,4 +8,4 @@ In short:
 1. Branch from `main`: `feature/…`, `fix/…` or `chore/…`.
 2. Open a pull request with a title that reads well in release notes. CI must be green.
 3. Squash and merge. Staging updates by itself.
-4. Go live with a version tag: `git tag v1.2.0 && git push origin v1.2.0`.
+4. Go live with a calendar version tag (year.month.counter): `git tag v2026.11.0 && git push origin v2026.11.0`.

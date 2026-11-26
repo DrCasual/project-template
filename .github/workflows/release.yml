@@ -1,4 +1,4 @@
-# Version tag (v1.2.3): promote the image that ran on staging, deploy it to
+# Version tag (calendar version, e.g. v2026.11.0): promote the image that ran on staging, deploy it to
 # production, then publish a GitHub Release with generated notes.
 name: release
 

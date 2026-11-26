@@ -22,7 +22,7 @@ Starting point for new Jonc. Studios projects. It comes with CI, Docker images o
 |---|---|
 | `.github/workflows/ci.yml` | Pull requests: labels, Python and Node checks, Docker build with smoke test. Remove the stacks the project doesn't use. |
 | `.github/workflows/staging.yml` | Merge to `main`: image `sha-<7>` → staging. |
-| `.github/workflows/release.yml` | Tag `vX.Y.Z`: same image → production, plus a GitHub Release. |
+| `.github/workflows/release.yml` | Tag `vYEAR.MONTH.N` (e.g. `v2026.11.0`): same image → production, plus a GitHub Release. |
 | `.github/release.yml` | Release notes grouped as *New / Fixed / Maintenance*. |
 | `.github/pull_request_template.md` | PR description template. |
 | `deploy/compose.yaml` | Stack on the server (app + Postgres). Secrets stay in the server's `.env`. |
