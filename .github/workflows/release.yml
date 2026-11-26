@@ -1,4 +1,4 @@
-# Version tag (v1.2.3): promote the image that ran on staging, deploy it to
+# Version tag (calendar version, e.g. v2026.11.0): promote the image that ran on staging, deploy it to
 # production, then publish a GitHub Release with generated notes.
 name: release
 
@@ -12,9 +12,11 @@ permissions:
 
 jobs:
   image:
+    if: ${{ !endsWith(github.repository, '/project-template') }}  # the template repo itself has no app to build
     uses: DrCasual/devops-templates/.github/workflows/promote-image.yml@v1
 
   deploy:
+    if: ${{ !endsWith(github.repository, '/project-template') }}  # the template repo itself has no app to build
     needs: image
     uses: DrCasual/devops-templates/.github/workflows/deploy.yml@v1
     with:
@@ -27,5 +29,6 @@ jobs:
       url: https://__DOMAIN__
 
   release:
+    if: ${{ !endsWith(github.repository, '/project-template') }}  # the template repo itself has no app to build
     needs: deploy
     uses: DrCasual/devops-templates/.github/workflows/github-release.yml@v1
