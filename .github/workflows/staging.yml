@@ -24,6 +24,7 @@ jobs:
     uses: DrCasual/devops-templates/.github/workflows/deploy.yml@v1
     with:
       environment: staging
+      latest-only: main  # two quick merges: only the newest one deploys
       image: ${{ needs.image.outputs.image }}
       runs-on: '["self-hosted", "home-server"]'
       deploy-dir: /opt/staging.__DOMAIN__
