@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   image:
+    if: ${{ !endsWith(github.repository, '/project-template') }}  # the template repo itself has no app to build
     uses: DrCasual/devops-templates/.github/workflows/docker-image.yml@v1
     with:
       push: true
@@ -18,6 +19,7 @@ jobs:
       smoke-command: bash deploy/smoke.sh
 
   deploy:
+    if: ${{ !endsWith(github.repository, '/project-template') }}  # the template repo itself has no app to build
     needs: image
     uses: DrCasual/devops-templates/.github/workflows/deploy.yml@v1
     with:
