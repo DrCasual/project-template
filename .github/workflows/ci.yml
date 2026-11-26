@@ -1,8 +1,10 @@
 # Runs on every pull request: checks only, nothing is pushed or deployed.
+# Can also be started by hand: Actions → ci → Run workflow.
 name: ci
 
 on:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,7 +13,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: ci-${{ github.head_ref }}
+  group: ci-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
